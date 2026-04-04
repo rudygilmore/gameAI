@@ -1,0 +1,42 @@
+# Single configuration file for Chase: environment, preprocessing, training, eval, and logging.
+# Paths are relative to the working directory unless noted. Training code should load this file
+# (e.g. `yaml.safe_load`) and validate values (N = 2^k with k >= 3, 512 % N == 0, etc.).
+# Default env matches execplan acceptance benchmark: 64×64 grid, 500 steps per episode.
+
+env:
+  # Registered Gymnasium id
+  id: Chase-v0
+  # Grid side length N (must be N = 2^k with k >= 3, and divide 512)
+  n: 64
+  max_episode_steps: 500
+  # Training usually uses null; set to "rgb_array" if you need pixels from render()
+  render_mode: null
+
+wrapper:
+  # Square resize after env observation (H, W); documented in README / wrappers
+  resize: 84
+
+training:
+  seed: 0
+  num_episodes: 5000
+  gamma: 0.99
+  batch_size: 32
+  replay_capacity: 50000
+  learning_rate: 0.0001
+  epsilon_start: 1.0
+  epsilon_end: 0.05
+  # Steps over which epsilon decays from start to end (linear or exponential per implementation)
+  epsilon_decay_steps: 50000
+  target_update_every: 1000
+  # Transitions to collect before first gradient step
+  min_replay_size: 1000
+  # "cpu", "cuda", or "auto"
+  device: auto
+
+eval:
+  checkpoint: chase_agent.pth
+  num_episodes: 5
+  epsilon: 0.0
+
+logging:
+  log_every_episodes: 10
