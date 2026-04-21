@@ -19,7 +19,7 @@ Training and environment hyperparameters live in **one file**, **[config.yaml](c
 | **`env`** | Gymnasium env id (`Chase-v0`), grid size **`n`**, `max_episode_steps`, optional `render_mode`. |
 | **`wrapper`** | Observation preprocessing (e.g. **resize** for CNN input). |
 | **`training`** | DQN hyperparameters: schedules, replay, optimizer, `device`, seeds, episode count. |
-| **`eval`** | Checkpoint path (**`chase_agent.pth`**), number of eval episodes, **ε = 0** for greedy eval. |
+| **`eval`** | Checkpoint path (**`checkpoints/chase_agent.pth`**), number of eval episodes, **ε = 0** for greedy eval. |
 | **`logging`** | How often to log metrics (e.g. every *n* episodes). |
 
 The training entry point should accept a path (default **`config.yaml`**) and load it with a YAML parser (e.g. **PyYAML**). Implementations must **validate** constraints from this README (e.g. **N = 2^k** with **k ≥ 3**, **512 % N == 0**). For new experiments, copy **`config.yaml`** to a new file or override keys via CLI if the trainer supports it.
@@ -56,7 +56,7 @@ Goal: train the agent with **Deep Q-Networks (DQN)** using a **minimal convoluti
 **Goal:** Observations are PyTorch-friendly.
 
 - **Observation wrapper** (subclass `gymnasium.ObservationWrapper`): consumes **512×512×3** `uint8` by default, then:
-  - Resize frames (e.g. **64×64** or **84×84**; pick one and document in code under `src/`).
+  - Resize frames using the config value **`wrapper.resize`** (default **64×64**).
   - Permute **(H, W, C) → (C, H, W)**.
   - Normalize pixels to **[0, 1]** (`float32`).
 - **Verify:** After `reset`, printed shape **(3, H, W)** and value range consistent with normalization.
@@ -92,8 +92,8 @@ Goal: train the agent with **Deep Q-Networks (DQN)** using a **minimal convoluti
 
 **Goal:** Save weights and sanity-check behavior.
 
-- **Save / load:** policy weights as **`chase_agent.pth`** (path configurable via **`eval`** / training config; default filename **`chase_agent.pth`**).
-- **Eval script:** Load weights, **ε = 0**, run several episodes (e.g. **5**) with rendering or logged success to confirm the actor **chases** the target.
+- **Save / load:** policy weights as **`checkpoints/chase_agent.pth`** (path configurable via **`eval`** / training config; default is this path).
+- **Eval script:** Load weights, **ε = 0**, run **20 episodes** (default config) with rendering or logged success to confirm the actor **chases** the target.
 
 **Acceptance benchmark** (full criteria in [execplan.md](execplan.md)): greedy eval (**ε = 0**) should reach the goal in **≥ 75%** of episodes on a **64×64** grid with **500** max episode steps (fixed seeds if needed).
 

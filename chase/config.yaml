@@ -8,13 +8,13 @@ env:
   id: Chase-v0
   # Grid side length N (must be N = 2^k with k >= 3, and divide 512)
   n: 64
-  max_episode_steps: 500
+  max_episode_steps: 800
   # Training usually uses null; set to "rgb_array" if you need pixels from render()
   render_mode: null
 
 wrapper:
   # Square resize after env observation (H, W); documented in README / wrappers
-  resize: 84
+  resize: 64
 
 training:
   seed: 0
@@ -26,17 +26,20 @@ training:
   epsilon_start: 1.0
   epsilon_end: 0.05
   # Steps over which epsilon decays from start to end (linear or exponential per implementation)
-  epsilon_decay_steps: 50000
-  target_update_every: 1000
+  epsilon_decay_steps: 100000
+  target_update_every: 100
   # Transitions to collect before first gradient step
-  min_replay_size: 1000
+  min_replay_size: 100
   # "cpu", "cuda", or "auto"
   device: auto
 
 eval:
-  checkpoint: chase_agent.pth
-  num_episodes: 5
+  checkpoint: checkpoints/chase_agent.pth
+  num_episodes: 100
   epsilon: 0.0
+  # Used when running `python -m src.eval --human` (seconds; larger = easier to follow)
+  render_delay_step: 0.08
+  render_delay_episode: 0.6
 
 logging:
   log_every_episodes: 10
