@@ -1,0 +1,25 @@
+# console/configs/airstriker_smoke.toml
+# Tiny smoke-test run config used by the validation transcript captured in
+# EXECPLAN_UNIVERSAL_RETRO_DQN.md (Artifacts and Notes). Trains for only a few
+# hundred steps so the full training loop, optimizer step, and checkpoint
+# write paths can be exercised end-to-end on a developer laptop in seconds.
+# Not intended to learn anything interesting.
+
+game        = "Airstriker-Genesis-v0"
+double      = true
+dueling     = true
+frame_stack = 4
+target_res  = [84, 84]
+
+[training]
+seed                 = 0
+device               = "cpu"
+total_steps          = 500
+learning_rate        = 1e-4
+gamma                = 0.99
+batch_size           = 16
+replay_capacity      = 1000
+target_update_period = 100
+epsilon_start        = 1.0
+epsilon_end          = 0.1
+epsilon_decay_steps  = 200

@@ -1,0 +1,28 @@
+# console/configs/example_run.toml
+# Universal Retro-DQN run config (v1). One file per training or play session.
+
+game          = "Airstriker-Genesis"   # stable-retro game id (must be imported)
+state         = "Level1"               # optional; passed to retro.make(state=...)
+double        = false                  # Double DQN target (default false)
+dueling       = false                  # dueling head      (default false)
+frame_stack   = 4                      # frames per observation stack (default 4)
+
+reward_shaping = false                 # if true, load reward_module below
+# reward_module = "sonic_custom"       # -> console/configs/rewards/sonic_custom.py
+                                       #    that file must define `class Wrapper(RewardWrapper)`
+
+# target_res = [84, 84]                # optional [height, width] resize after vision pipeline;
+                                       # omit to use the env's built-in spatial shape
+
+[training]
+seed                 = 0
+device               = "cpu"           # "cpu", "cuda", or "mps"
+total_steps          = 1000000
+learning_rate        = 1e-4
+gamma                = 0.99
+batch_size           = 32
+replay_capacity      = 100000
+target_update_period = 1000            # steps between target-net syncs
+epsilon_start        = 1.0
+epsilon_end          = 0.05
+epsilon_decay_steps  = 250000

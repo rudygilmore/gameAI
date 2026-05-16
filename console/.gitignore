@@ -1,0 +1,22 @@
+# console/.gitignore
+# Rationale and inventory live in EXECPLAN_UNIVERSAL_RETRO_DQN.md (Decision Log,
+# 2026-05-15 entry on console/.gitignore). Keep this file aligned with that decision.
+
+# Training artifacts (checkpoints, optional CSV logs).
+models/
+
+# Local exploration script for stable-retro's render path on Apple Silicon.
+# The pyglet / CocoaAlternateEventLoop workaround it demonstrates is documented
+# in the ExecPlan's "Surprises & Discoveries" section.
+random_text.py
+
+# Developer-local stable-retro install notes; upstream docs are authoritative.
+stable_retro_setup_notes.txt
+
+# Python build/test artifacts.
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+build/
+dist/
